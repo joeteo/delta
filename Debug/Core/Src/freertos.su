@@ -1,0 +1,4 @@
+../Core/Src/freertos.c:100:6:vApplicationGetIdleTaskMemory	24	static
+../Core/Src/freertos.c:114:6:MX_FREERTOS_Init	184	static
+../Core/Src/freertos.c:219:6:StartDefaultTask	128	static
+../Core/Src/freertos.c:399:6:cal_Write_Pos_Task	128	static

@@ -1,0 +1,8 @@
+../Core/Src/cli.c:34:5:_write	24	static
+../Core/Src/cli.c:51:5:cmd_torque	16	static
+../Core/Src/cli.c:68:5:cdm_pump	16	static
+../Core/Src/cli.c:85:5:cmd_conveyorBelt	16	static
+../Core/Src/cli.c:114:5:cmd_pick	16	static
+../Core/Src/cli.c:120:5:cmd_throw	16	static
+../Core/Src/cli.c:127:6:parse_input_string	32	static
+../Core/Src/cli.c:154:6:cmd_handler	72	static

@@ -1,0 +1,7 @@
+../Core/Src/DeltaKinematics.c:42:6:ServoConversion	8	static
+../Core/Src/DeltaKinematics.c:48:9:ConversionFromServo	16	static
+../Core/Src/DeltaKinematics.c:63:6:setCoordinates	32	static
+../Core/Src/DeltaKinematics.c:69:6:resetCoordinates	32	static
+../Core/Src/DeltaKinematics.c:80:5:delta_calcAngleYZ	112	static
+../Core/Src/DeltaKinematics.c:106:5:inverse	32	static
+../Core/Src/DeltaKinematics.c:126:5:forward	256	static
