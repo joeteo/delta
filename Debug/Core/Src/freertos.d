@@ -47,7 +47,7 @@ Core/Src/freertos.o: ../Core/Src/freertos.c \
  ../Middlewares/Third_Party/FreeRTOS/Source/include/event_groups.h \
  ../Middlewares/Third_Party/FreeRTOS/Source/include/timers.h \
  ../Core/Inc/dxl_control.h ../Core/Inc/main.h \
- ../Core/Inc/DeltaKinematics.h
+ ../Core/Inc/DeltaKinematics.h ../Core/Inc/cmdHandle.h
 ../Middlewares/Third_Party/FreeRTOS/Source/include/FreeRTOS.h:
 ../Core/Inc/FreeRTOSConfig.h:
 ../Middlewares/Third_Party/FreeRTOS/Source/include/projdefs.h:
@@ -99,3 +99,4 @@ Core/Src/freertos.o: ../Core/Src/freertos.c \
 ../Core/Inc/dxl_control.h:
 ../Core/Inc/main.h:
 ../Core/Inc/DeltaKinematics.h:
+../Core/Inc/cmdHandle.h:

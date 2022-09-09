@@ -5,8 +5,8 @@
  *      Author: controllerstech.com
  */
 
-#ifndef INC_UARTRINGBUFDMA_H_
-#define INC_UARTRINGBUFDMA_H_
+#ifndef INC_UARTCALLBACK_H_
+#define INC_UARTCALLBACK_H_
 
 
 /* Initialize the Ring buffer
@@ -56,4 +56,4 @@ int getAfter (char *string, uint8_t numberofchars, char *buffertocopyinto, uint3
 
 
 
-#endif /* INC_UARTRINGBUFDMA_H_ */
+#endif /* INC_UARTCALLBACK_H_ */

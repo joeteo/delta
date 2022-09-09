@@ -1,4 +1,0 @@
-../Core/Src/uartRingBufDMA.c:75:6:Ringbuf_Init	8	static
-../Core/Src/uartRingBufDMA.c:103:6:Ringbuf_Reset	8	static
-../Core/Src/uartRingBufDMA.c:385:6:HAL_UARTEx_RxEventCallback	24	static
-../Core/Src/uartRingBufDMA.c:531:6:HAL_UART_RxCpltCallback	24	static

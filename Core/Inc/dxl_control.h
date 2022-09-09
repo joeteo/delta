@@ -89,15 +89,12 @@ typedef enum{
 	TRUE	= 1
 }bool;
 
-void deltaInit();
 void sendInstPacket(uint8_t* packet, uint8_t length);
 void servoDelay(uint32_t millisec);
 void setMovingSpeed(uint8_t ID, uint16_t Speed);
 void setGoalPosition(uint8_t ID, uint16_t Position);
 void onOffTorque(uint8_t ID, uint8_t State);
 uint16_t getPresentPosition(uint8_t ID);
-void upEndEffector();
-void downEndEffector();
 void syncWriteGoalPosition(uint16_t P0, uint16_t S0, uint16_t P1, uint16_t S1, uint16_t P2, uint16_t S2);
 void setEndless(uint8_t ID, uint8_t State);
 void turn(uint8_t ID, uint8_t SIDE, uint16_t Speed);

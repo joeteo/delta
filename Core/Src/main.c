@@ -26,8 +26,8 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-#include "uartRingBufDMA.h"
 #include <stdio.h>
+#include "uartCallback.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -37,14 +37,6 @@
 
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
-//extern uint8_t rx2_data[10];
-
-//extern osSemaphoreId UPSemHandle;
-//extern osSemaphoreId DOWMSemHandle;
-//extern osSemaphoreId ReadPosSemHandle;
-//extern osSemaphoreId TorqueOnSemHandle;
-//extern osSemaphoreId TorqueOffSemHandle;
-//extern osSemaphoreId ThrowSemHandle;
 
 /* USER CODE END PD */
 
@@ -57,7 +49,7 @@
 /* Private variables ---------------------------------------------------------*/
 
 /* USER CODE BEGIN PV */
-//uint8_t rx3_data;
+
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -182,37 +174,7 @@ void SystemClock_Config(void)
 }
 
 /* USER CODE BEGIN 4 */
-//void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
-//{
-//	if(huart->Instance==USART2){
-//
-//		HAL_UART_Transmit(&huart3, rx2_data, 10, 1000);
-//
-//		HAL_UART_Receive_IT(&huart2, rx2_data, 10);
-//		if(rx3_data=='1'){
-//			printf("\r\n");
-//			osSemaphoreRelease(UPSemHandle);
-//		}else if(rx3_data=='2'){
-//			printf("\r\n");
-//			osSemaphoreRelease(DOWMSemHandle);
-//		}else if(rx3_data=='3'){
-//			printf("\r\n");
-//			osSemaphoreRelease(ReadPosSemHandle);
-//		}else if(rx3_data=='4'){
-//			printf("\r\n");
-//			osSemaphoreRelease(TorqueOffSemHandle);
-//		}else if(rx3_data=='5'){
-//			printf("\r\n");
-//			osSemaphoreRelease(TorqueOnSemHandle);
-//		}else if(rx3_data=='6'){
-//			printf("\r\n");
-//			osSemaphoreRelease(ThrowSemHandle);
-//		}
-//
-//
-//		HAL_UART_Receive_IT(&huart3, &rx3_data, 1);
-//	}
-//}
+
 /* USER CODE END 4 */
 
 /**

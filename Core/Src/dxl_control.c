@@ -9,7 +9,8 @@
 #include "dxl_control.h"
 #include "cmsis_os.h"
 #include "DeltaKinematics.h"
-
+#include <stdio.h>
+#include <string.h>
 
 
 extern UART_HandleTypeDef huart2;
@@ -27,24 +28,10 @@ extern uint16_t GP[3];
 
 
 #define RxBuf_SIZE 20
-extern uint8_t RxBuf[RxBuf_SIZE];
+extern uint8_t rx2_Buf[RxBuf_SIZE];
 
 char buffer[10]={0,};
 
-void deltaInit(){
-	setMovingSpeed(AX_BROADCAST_ID, 100);
-	upEndEffector();
-
-	printf("=====================\r\n");
-	printf("Command Line Interface\r\n");
-	printf("=====================\r\n>> ");
-//	char temp[4]={0,};
-//	sprintf(temp, ">> ");
-//	HAL_UART_Transmit_IT(&huart3, (uint8_t*)temp, sizeof(temp));
-
-//	uint8_t str[] = "******* CONTROL MENU *******\r\n 1. UP\r\n 2. DOWN\r\n 3. Read Position\r\n 4. Torque Off\r\n 5. Torque On\r\n 6 : Throw(temp)\r\n****************************\r\n";
-//	HAL_UART_Transmit(&huart3, str, sizeof(str), 1000);
-}
 
 void servoDelay(uint32_t millisec){
 	osDelay(millisec);
@@ -185,10 +172,10 @@ uint16_t getPresentPosition(uint8_t ID)
     sendInstPacket(packet, length);
 
     servoDelay(10);
-    Checksum = (~(RxBuf[2] + RxBuf[3] + RxBuf[4] + RxBuf[5] + RxBuf[6])) & 0xFF;
-    uint16_t presentPosition = RxBuf[5] + (RxBuf[6]<<8);
+    Checksum = (~(rx2_Buf[2] + rx2_Buf[3] + rx2_Buf[4] + rx2_Buf[5] + rx2_Buf[6])) & 0xFF;
+    uint16_t presentPosition = rx2_Buf[5] + (rx2_Buf[6]<<8);
 
-    if(Checksum==RxBuf[7]){
+    if(Checksum==rx2_Buf[7]){
     	return presentPosition;
     }else {
     	return 0;
@@ -338,24 +325,7 @@ void turn(uint8_t ID, uint8_t SIDE, uint16_t Speed)
 
 
 
-void upEndEffector(){
 
-	setCoordinates(0,0,-256.984);
-	inverse();
-	ServoConversion();
-
-	setGoalPosition(AX_BROADCAST_ID, GP[0]);
-	servoDelay(1000);
-}
-void downEndEffector(){
-
-	setCoordinates(0,0,-380.724);
-	inverse();
-	ServoConversion();
-
-	//setGoalPosition(AX_BROADCAST_ID, GP[0]);
-	servoDelay(1000);
-}
 
 
 
