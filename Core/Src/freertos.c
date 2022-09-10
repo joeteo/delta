@@ -66,6 +66,17 @@ osSemaphoreId ReadPosSemHandle;
 /* Private function prototypes -----------------------------------------------*/
 /* USER CODE BEGIN FunctionPrototypes */
 
+void test(queueMessage* smsg){
+
+	smsg->mX=0;
+	smsg->mY=-60;
+	smsg->mZ=-370;
+
+	smsg->maxSpeed=100;
+	smsg->timing=0;
+
+	osMessagePut(setQueueHandle, (uint32_t)smsg, 100);
+}
 /* USER CODE END FunctionPrototypes */
 
 void StartDefaultTask(void const * argument);
@@ -147,6 +158,9 @@ void MX_FREERTOS_Init(void) {
   /* definition and creation of cmdHandleTask */
   osThreadDef(cmdHandleTask, cmd_Handle_Task, osPriorityNormal, 0, 512);
   cmdHandleTaskHandle = osThreadCreate(osThread(cmdHandleTask), NULL);
+
+
+
 
   /* USER CODE BEGIN RTOS_THREADS */
   /* add threads, ... */
@@ -243,12 +257,16 @@ void cal_Write_Pos_Task(void const * argument)
 
 			uint16_t max = (diff[0] > diff[1] && diff[0] > diff[2]) ? diff[0] : (diff[1] > diff[2]) ? diff[1] : diff[2];
 
+			double speed[3]={100,100,100};
 
-			double speed[3]={0,};
-			speed[0]=((double)diff[0]/max)*msg.maxSpeed;
-			speed[1]=((double)diff[1]/max)*msg.maxSpeed;
-			speed[2]=((double)diff[2]/max)*msg.maxSpeed;
-
+			if(max!=0){
+				speed[0]=((double)diff[0]/max)*msg.maxSpeed;
+				speed[1]=((double)diff[1]/max)*msg.maxSpeed;
+				speed[2]=((double)diff[2]/max)*msg.maxSpeed;
+				for(int i=0; i<3; i++){
+					if(speed[i]<1) speed[i]=10;
+				}
+			}
 
 			syncWriteGoalPosition(GP[0],(uint16_t)speed[0],GP[1],(uint16_t)speed[1],GP[2],(uint16_t)speed[2]);
 //			servoDelay(10);
@@ -285,9 +303,12 @@ void cmd_Handle_Task(void const * argument)
 	  setEvent = osMessageGet(cmdQueueHandle, osWaitForever);
 		if(setEvent.status == osEventMessage)
 		{
-			char msg[20]={0,};
-			memcpy(msg, setEvent.value.p, 20);
-			if(cmd_handler(msg)){
+
+
+			queueMessage msg;
+			char cmd[20]={0,};
+			memcpy(cmd, setEvent.value.p, 20);
+			if(cmd_handler(cmd, &msg)){
 				osSemaphoreRelease(ReadPosSemHandle);
 				osThreadSetPriority(defaultTaskHandle, osPriorityAboveNormal);
 			}

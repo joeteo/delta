@@ -64,8 +64,8 @@ all: main-build
 main-build: delta.elf secondary-outputs
 
 # Tool invocations
-delta.elf delta.map: $(OBJS) $(USER_OBJS) D:\work_space\jjin_delata\delta\STM32F429ZITX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
-	arm-none-eabi-gcc -o "delta.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m4 -T"D:\work_space\jjin_delata\delta\STM32F429ZITX_FLASH.ld" --specs=nosys.specs -Wl,-Map="delta.map" -Wl,--gc-sections -static -u _printf_float --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+delta.elf delta.map: $(OBJS) $(USER_OBJS) D:\delta\STM32F429ZITX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
+	arm-none-eabi-gcc -o "delta.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m4 -T"D:\delta\STM32F429ZITX_FLASH.ld" --specs=nosys.specs -Wl,-Map="delta.map" -Wl,--gc-sections -static -u _printf_float --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
 	@echo 'Finished building target: $@'
 	@echo ' '
 

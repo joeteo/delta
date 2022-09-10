@@ -12,25 +12,6 @@
 #define MAX_CMD_NUM 10
 
 
-typedef int cmd_func(int len, char* cmd);
-
-struct Command_List
-{
-	char cmd;
-	cmd_func* func;
-};
-
-int cmd_torque(int len, char* cmd);
-int cdm_pump(int len, char* cmd);
-int cmd_conveyorBelt(int len, char* cmd);
-int cmd_pick(int len, char* cmd);
-int cmd_throw(int len, char* cmd);
-int cmd_defaultPos(int len, char* cmd);
-int cmd_read(int len, char* cmd);
-int cmd_moveTo(int len, char* cmd);
-
-int cmd_handler(char* cmd);
-
 typedef struct
 {
 	float mX;
@@ -41,14 +22,33 @@ typedef struct
 
 }queueMessage;
 
+
+typedef int cmd_func(int len, char* cmd, queueMessage* smsg);
+
+struct Command_List
+{
+	char cmd;
+	cmd_func* func;
+};
+
+int cmd_torque(int len, char* cmd, queueMessage* smsg);
+int cmd_pump(int len, char* cmd, queueMessage* smsg);
+int cmd_conveyorBelt(int len, char* cmd, queueMessage* smsg);
+int cmd_pick(int len, char* cmd, queueMessage* smsg);
+int cmd_throw(int len, char* cmd, queueMessage* smsg);
+int cmd_defaultPos(int len, char* cmd, queueMessage* smsg);
+int cmd_read(int len, char* cmd, queueMessage* smsg);
+int cmd_moveTo(int len, char* cmd, queueMessage* smsg);
+
+int cmd_handler(char* cmd, queueMessage* smsg);
+
 void deltaInit();
-void upEndEffector();
-void downEndEffector();
+void upEndEffector(queueMessage* smsg);
+void downEndEffector(queueMessage* smsg);
 void torqueOn();
 void torqueOff();
 void pumpOn();
 void pumpOff();
-void throw();
 void cvbeltTurnRight();
 void cvbeltTurnLeft();
 void cvbeltStop();
