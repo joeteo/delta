@@ -49,11 +49,10 @@ int32_t TIMEOUT = 0;
 
 
 /* Initialize the Ring Buffer */
-void Ringbuf_Init (void)
+void UartCallback_Init (void)
 {
 	memset(rx2_Buf, '\0', RxBuf_SIZE);
 	memset(MainBuf, '\0', MainBuf_SIZE);
-
 
 	//Head = Tail = 0;
 	oldPos = 0;

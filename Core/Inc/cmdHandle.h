@@ -18,7 +18,6 @@ typedef struct
 	float mY;
 	float mZ;
 	int maxSpeed;
-	unsigned char timing;
 
 }queueMessage;
 

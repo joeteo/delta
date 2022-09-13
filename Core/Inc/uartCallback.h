@@ -12,7 +12,7 @@
 /* Initialize the Ring buffer
  * It will also initialize the UART RECEIVE DMA
  * */
-void Ringbuf_Init (void);
+void UartCallback_Init (void);
 
 /* Reset the ring buffer
  * Resets the Head and Tail, also the buffers

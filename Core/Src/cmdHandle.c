@@ -115,9 +115,10 @@ int cmd_throw(int len, char* cmd, queueMessage* smsg)
 	smsg->mY=-140;
 	smsg->mZ=-230;
 	smsg->maxSpeed=1000;
-	smsg->timing=2;
 
 	osMessagePut(setQueueHandle, (uint32_t)smsg, 100);
+	pumpOff();
+
 
 	return 0;
 }
@@ -151,7 +152,7 @@ int cmd_moveTo(int len, char* cmd, queueMessage* smsg)
 		smsg->mZ=tempZ;
 
 		smsg->maxSpeed=100;
-		smsg->timing=0;
+
 
 		osMessagePut(setQueueHandle, (uint32_t)smsg, 100);
 	}
@@ -200,7 +201,6 @@ void upEndEffector(queueMessage* smsg){
 	smsg->mZ=-256.984;
 
 	smsg->maxSpeed=100;
-	smsg->timing=0;
 
 	osMessagePut(setQueueHandle, (uint32_t)smsg, 100);
 
@@ -216,7 +216,6 @@ void downEndEffector(queueMessage* smsg){
 	smsg->mZ=-407.891;
 
 	smsg->maxSpeed=100;
-	smsg->timing=0;
 
 	osMessagePut(setQueueHandle, (uint32_t)smsg, 100);
 }
@@ -251,7 +250,7 @@ void cvbeltStop(){
 }
 
 void deltaInit(){
-	//setMovingSpeed(AX_BROADCAST_ID, 100);
+	setMovingSpeed(AX_BROADCAST_ID, 100);
 	//upEndEffector();
 
 	setCoordinates(0,0,-256.984);

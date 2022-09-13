@@ -43,7 +43,6 @@
 /* Private macro -------------------------------------------------------------*/
 /* USER CODE BEGIN PM */
 
-
 /* USER CODE END PM */
 
 /* Private variables ---------------------------------------------------------*/
@@ -97,8 +96,8 @@ int main(void)
   MX_USART2_UART_Init();
   MX_USART3_UART_Init();
   /* USER CODE BEGIN 2 */
-  Ringbuf_Init();
-  //HAL_UART_Receive_IT(&huart3, &rx3_data, 1);
+  UartCallback_Init();
+
   /* USER CODE END 2 */
 
   /* Call init function for freertos objects (in freertos.c) */

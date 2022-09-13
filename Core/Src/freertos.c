@@ -66,17 +66,6 @@ osSemaphoreId ReadPosSemHandle;
 /* Private function prototypes -----------------------------------------------*/
 /* USER CODE BEGIN FunctionPrototypes */
 
-void test(queueMessage* smsg){
-
-	smsg->mX=0;
-	smsg->mY=-60;
-	smsg->mZ=-370;
-
-	smsg->maxSpeed=100;
-	smsg->timing=0;
-
-	osMessagePut(setQueueHandle, (uint32_t)smsg, 100);
-}
 /* USER CODE END FunctionPrototypes */
 
 void StartDefaultTask(void const * argument);
@@ -186,26 +175,30 @@ void StartDefaultTask(void const * argument)
 	  if(osSemaphoreWait(ReadPosSemHandle, osWaitForever) == osOK)
 	  {
 
-		  uint8_t buf[30];
+		  //uint8_t buf[30];
 		  uint16_t presentPos[3];
 		  for(int i = 0; i < 3; i++){
-			  memset(buf,0,sizeof(buf));
+
 			  presentPos[i]=getPresentPosition(i);
-			  sprintf((char*)buf, "ID %d's Position : %d\r\n", i, presentPos[i]);
-			  HAL_UART_Transmit(&huart3, buf, sizeof(buf), 1000);
+
 		  }
 		  double* tempTheta = ConversionFromServo(presentPos[0], presentPos[1], presentPos[2]);
 		  forward(tempTheta[0],tempTheta[1],tempTheta[2]);
-		  memset(buf,0,sizeof(buf));
-		  sprintf((char*)buf, "Coordinate X : %lf\r\n", coord[0]);
-		  HAL_UART_Transmit(&huart3, buf, sizeof(buf), 1000);
-		  memset(buf,0,sizeof(buf));
-		  sprintf((char*)buf, "Coordinate Y : %lf\r\n", coord[1]);
-		  HAL_UART_Transmit(&huart3, buf, sizeof(buf), 1000);
-		  memset(buf,0,sizeof(buf));
-		  sprintf((char*)buf, "Coordinate Z : %lf\r\n", coord[2]);
-		  HAL_UART_Transmit(&huart3, buf, sizeof(buf), 1000);
 
+		  char buf[14]="Z\0";
+		  for(int i=0; i<3; i++){
+			  if((int)coord[i] >= 0){
+				  strcat(buf, "+");
+			  }else{
+				  strcat(buf, "-");
+			  }
+			  char temp[4]="\0";
+			  sprintf(temp, "%03d",(int)abs(coord[i]));
+			  strcat(buf, temp);
+		  }
+		  strcat(buf, "\n");
+
+		  HAL_UART_Transmit(&huart3, (uint8_t*)buf, sizeof(buf), 1000);
 
 		  osThreadSetPriority(defaultTaskHandle, osPriorityNormal);
 	  }
@@ -269,14 +262,8 @@ void cal_Write_Pos_Task(void const * argument)
 			}
 
 			syncWriteGoalPosition(GP[0],(uint16_t)speed[0],GP[1],(uint16_t)speed[1],GP[2],(uint16_t)speed[2]);
-//			servoDelay(10);
-//			if(msg.timing==2){
-//				HAL_GPIO_WritePin(GPIOG, GPIO_PIN_0, 1);
-//			}
-//			servoDelay(990);
-//			if(msg.timing==1){
-//				HAL_GPIO_WritePin(GPIOG, GPIO_PIN_0, 0);
-//			}
+			servoDelay(10);
+
 
 
 		}
@@ -303,7 +290,6 @@ void cmd_Handle_Task(void const * argument)
 	  setEvent = osMessageGet(cmdQueueHandle, osWaitForever);
 		if(setEvent.status == osEventMessage)
 		{
-
 
 			queueMessage msg;
 			char cmd[20]={0,};
