@@ -1,5 +1,5 @@
-../Core/Src/freertos.c:84:6:vApplicationGetIdleTaskMemory	24	static
-../Core/Src/freertos.c:98:6:MX_FREERTOS_Init	144	static
-../Core/Src/freertos.c:167:6:StartDefaultTask	56	static
-../Core/Src/freertos.c:219:6:cal_Write_Pos_Task	128	static
-../Core/Src/freertos.c:283:6:cmd_Handle_Task	72	static
+../Core/Src/freertos.c:87:6:vApplicationGetIdleTaskMemory	24	static
+../Core/Src/freertos.c:101:6:MX_FREERTOS_Init	144	static
+../Core/Src/freertos.c:167:6:read_Pos_Task	64	static
+../Core/Src/freertos.c:218:6:cal_Write_Pos_Task	128	static
+../Core/Src/freertos.c:282:6:cmd_Handle_Task	72	static

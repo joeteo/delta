@@ -251,6 +251,7 @@ void cvbeltStop(){
 
 void deltaInit(){
 	setMovingSpeed(AX_BROADCAST_ID, 100);
+	cvbeltStop();
 	//upEndEffector();
 
 	setCoordinates(0,0,-256.984);

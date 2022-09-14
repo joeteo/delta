@@ -31,6 +31,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include "cmdHandle.h"
+#include "uartCallback.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -43,6 +44,8 @@
 
 extern uint16_t GP[3];
 extern double coord[3];
+
+extern uint8_t rx2_Buf[RxBuf_SIZE];
 /* USER CODE END PD */
 
 /* Private macro -------------------------------------------------------------*/
@@ -56,7 +59,7 @@ extern UART_HandleTypeDef huart3;
 extern _Coordinates C;
 
 /* USER CODE END Variables */
-osThreadId defaultTaskHandle;
+osThreadId readPosTaskHandle;
 osThreadId calWritePosTaskHandle;
 osThreadId cmdHandleTaskHandle;
 osMessageQId setQueueHandle;
@@ -68,7 +71,7 @@ osSemaphoreId ReadPosSemHandle;
 
 /* USER CODE END FunctionPrototypes */
 
-void StartDefaultTask(void const * argument);
+void read_Pos_Task(void const * argument);
 void cal_Write_Pos_Task(void const * argument);
 void cmd_Handle_Task(void const * argument);
 
@@ -136,9 +139,9 @@ void MX_FREERTOS_Init(void) {
   /* USER CODE END RTOS_QUEUES */
 
   /* Create the thread(s) */
-  /* definition and creation of defaultTask */
-  osThreadDef(defaultTask, StartDefaultTask, osPriorityNormal, 0, 512);
-  defaultTaskHandle = osThreadCreate(osThread(defaultTask), NULL);
+  /* definition and creation of readPosTask */
+  osThreadDef(readPosTask, read_Pos_Task, osPriorityNormal, 0, 512);
+  readPosTaskHandle = osThreadCreate(osThread(readPosTask), NULL);
 
   /* definition and creation of calWritePosTask */
   osThreadDef(calWritePosTask, cal_Write_Pos_Task, osPriorityNormal, 0, 512);
@@ -148,65 +151,61 @@ void MX_FREERTOS_Init(void) {
   osThreadDef(cmdHandleTask, cmd_Handle_Task, osPriorityNormal, 0, 512);
   cmdHandleTaskHandle = osThreadCreate(osThread(cmdHandleTask), NULL);
 
-
-
-
   /* USER CODE BEGIN RTOS_THREADS */
   /* add threads, ... */
   /* USER CODE END RTOS_THREADS */
 
 }
 
-/* USER CODE BEGIN Header_StartDefaultTask */
+/* USER CODE BEGIN Header_read_Pos_Task */
 /**
-  * @brief  Function implementing the defaultTask thread.
+  * @brief  Function implementing the readPosTask thread.
   * @param  argument: Not used
   * @retval None
   */
-/* USER CODE END Header_StartDefaultTask */
-void StartDefaultTask(void const * argument)
+/* USER CODE END Header_read_Pos_Task */
+void read_Pos_Task(void const * argument)
 {
-  /* USER CODE BEGIN StartDefaultTask */
-  /* Infinite loop */
-  for(;;)
-  {
+	/* USER CODE BEGIN read_Pos_Task */
+	/* Infinite loop */
+	for(;;)
+	{
+		if(osSemaphoreWait(ReadPosSemHandle, osWaitForever) == osOK)
+		{
+			uint16_t presentPos[3];
+			for(int i = 0; i < 3; i++){
+				presentPos[i]=getPresentPosition(i);
+				memset(rx2_Buf, 0, sizeof(rx2_Buf));
+			}
+			char buf[14]="Z+999+999+999\n";
+			if(presentPos[0]==0 && presentPos[1]==0 && presentPos[2]==0){
 
+			}else {
+				double* tempTheta = ConversionFromServo(presentPos[0], presentPos[1], presentPos[2]);
+				forward(tempTheta[0],tempTheta[1],tempTheta[2]);
 
-	  if(osSemaphoreWait(ReadPosSemHandle, osWaitForever) == osOK)
-	  {
+				buf[0]='Z';
+				buf[1]='\0';
+				for(int i=0; i<3; i++){
+					if((int)coord[i] >= 0){
+						strcat(buf, "+");
+					}else{
+						strcat(buf, "-");
+					}
+					char temp[4]="\0";
+					sprintf(temp, "%03d",(int)abs(coord[i]));
+					strcat(buf, temp);
+				}
+				strcat(buf, "\n");
+			}
 
-		  //uint8_t buf[30];
-		  uint16_t presentPos[3];
-		  for(int i = 0; i < 3; i++){
+			HAL_UART_Transmit(&huart3, (uint8_t*)buf, sizeof(buf), 1000);
 
-			  presentPos[i]=getPresentPosition(i);
+			osThreadSetPriority(readPosTaskHandle, osPriorityNormal);
 
-		  }
-		  double* tempTheta = ConversionFromServo(presentPos[0], presentPos[1], presentPos[2]);
-		  forward(tempTheta[0],tempTheta[1],tempTheta[2]);
-
-		  char buf[14]="Z\0";
-		  for(int i=0; i<3; i++){
-			  if((int)coord[i] >= 0){
-				  strcat(buf, "+");
-			  }else{
-				  strcat(buf, "-");
-			  }
-			  char temp[4]="\0";
-			  sprintf(temp, "%03d",(int)abs(coord[i]));
-			  strcat(buf, temp);
-		  }
-		  strcat(buf, "\n");
-
-		  HAL_UART_Transmit(&huart3, (uint8_t*)buf, sizeof(buf), 1000);
-
-		  osThreadSetPriority(defaultTaskHandle, osPriorityNormal);
-	  }
-
-
-
-  }
-  /* USER CODE END StartDefaultTask */
+		}
+	}
+  /* USER CODE END read_Pos_Task */
 }
 
 /* USER CODE BEGIN Header_cal_Write_Pos_Task */
@@ -296,7 +295,7 @@ void cmd_Handle_Task(void const * argument)
 			memcpy(cmd, setEvent.value.p, 20);
 			if(cmd_handler(cmd, &msg)){
 				osSemaphoreRelease(ReadPosSemHandle);
-				osThreadSetPriority(defaultTaskHandle, osPriorityAboveNormal);
+				osThreadSetPriority(readPosTaskHandle, osPriorityAboveNormal);
 			}
 
 		}

@@ -24,9 +24,6 @@ extern osMessageQId cmdQueueHandle;
 
 #define UART3 huart3
 
-/* Define the Size Here */
-#define RxBuf_SIZE 20
-#define MainBuf_SIZE 40
 
 uint8_t rx3_data;
 uint8_t rx3_buf[RxBuf_SIZE];

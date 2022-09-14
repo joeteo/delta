@@ -9,6 +9,11 @@
 #define INC_UARTCALLBACK_H_
 
 
+
+/* Define the Size Here */
+#define RxBuf_SIZE 20
+#define MainBuf_SIZE 40
+
 /* Initialize the Ring buffer
  * It will also initialize the UART RECEIVE DMA
  * */
