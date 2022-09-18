@@ -2,7 +2,7 @@
  * cli.h
  *
  *  Created on: Sep 4, 2022
- *      Author: J
+ *      Author: Jo soo hyun
  */
 
 
@@ -38,6 +38,7 @@ int cmd_throw(int len, char* cmd, queueMessage* smsg);
 int cmd_defaultPos(int len, char* cmd, queueMessage* smsg);
 int cmd_read(int len, char* cmd, queueMessage* smsg);
 int cmd_moveTo(int len, char* cmd, queueMessage* smsg);
+int cmd_wait(int len, char* cmd, queueMessage* smsg);
 
 int cmd_handler(char* cmd, queueMessage* smsg);
 

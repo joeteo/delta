@@ -40,6 +40,7 @@ struct Command_List  CmdList[] =
 	{'O',	cmd_defaultPos },
 	{'R',	cmd_read },
 	{'Z',	cmd_moveTo },
+	{'W',	cmd_wait},
 	{0,0 }
 };
 
@@ -160,6 +161,20 @@ int cmd_moveTo(int len, char* cmd, queueMessage* smsg)
 	return 0;
 }
 
+
+int cmd_wait(int len, char* cmd, queueMessage* smsg)
+{
+
+	if(len == 4){
+		int time = (cmd[0]-'0')*1000 + (cmd[1]-'0')*100 + (cmd[2]-'0')*10 + (cmd[3]-'0')*1 ;
+		servoDelay(time);
+	}
+
+	return 0;
+}
+
+
+
 int cmd_read(int len, char* cmd, queueMessage* smsg)
 {
 	return 1;
@@ -237,17 +252,18 @@ void pumpOff(){
 
 void cvbeltTurnRight(){
 	setEndless(AX_CONVEYOR_ID, ON);
-	turn(AX_CONVEYOR_ID, RIGHT, 600);
+	turn(AX_CONVEYOR_ID, RIGHT, 1000);
 }
 
 void cvbeltTurnLeft(){
 	setEndless(AX_CONVEYOR_ID, ON);
-	turn(AX_CONVEYOR_ID, LEFT, 600);
+	turn(AX_CONVEYOR_ID, LEFT, 1000);
 }
 
 void cvbeltStop(){
 	onOffTorque(AX_CONVEYOR_ID, OFF);
 }
+
 
 void deltaInit(){
 	setMovingSpeed(AX_BROADCAST_ID, 100);
